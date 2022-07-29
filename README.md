@@ -12,3 +12,4 @@ It's a very simple bot, it basically connects to the twitch channel and when som
 
 ## Now compile and run
  
+# For every bug/problem or new feautures open a new issue

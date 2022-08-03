@@ -1,37 +1,33 @@
-import * as env from 'dotenv';
-import * as tmi from 'tmi.js';
-env.config();
+import { config } from 'dotenv';
+import { Client } from 'tmi.js';
+config();
 
-let Bot_Name = process.env.BOT_NAME;
-let Token = process.env.OAUTH_TOKEN;
+let Bot_Name: string = process.env.BOT_NAME ?? "";
+let Token: string = process.env.OAUTH_TOKEN ?? "";
 
-const client = new tmi.Client
-(
-    {
+const client: Client = new Client({
+    connection: {
+        reconnect: true,
+        secure: true,
+    },
+    identity: {
+        username: Bot_Name,
+        password: Token
+    },
+    channels: ["solopietro_"],
+});
 
-        connection: 
-        {
-            reconnect: true,
-            secure: true,
-        },
-
-        identity: 
-        {
-            username: Bot_Name,
-            password: Token
-        },
-        channels: ["solopietro_"]
-
-    }
-);
-
-client.connect().catch(console.error); 
+client.connect().catch(err => console.error(err));
 
 client.on('message', (channel, tags, message, self) => {
-	if(self) return;
+    if (self) return;
 
-	if(message.toLowerCase() === '!saluta') 
-    {
-	    client.say(channel, `Ciao @${tags.username} è bello vederti!`);
-	}
+    switch (message.toLowerCase()) {
+        case "!saluta":
+            client.say(channel, `Ciao @${tags.username} Ã¨ bello vederti!`);
+            break;
+        default:
+            client.say(channel, "Comando non trovato");
+            break;
+    }
 });
